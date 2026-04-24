@@ -1,0 +1,558 @@
+TIPOS DE DADOS NO ORACLE   |   EQUIVALENCIA ANSI DATA TYPE
+
+CHAR                           CHAR(n), CHARACTER(n)   
+
+VARCHAR2                       CHARACTER VARYNG(n),CHAR VARYNG(n)
+
+NCHAR                          NATIONAL CHARACER(n), NATIONAL CHAR(n), NCHAR(n)
+
+NVARCHAR2                      NATIONAL CHARACTER VARING(n), NATIONAL CHAR VARYNG(n), NCHAR VARYNG(n)
+
+NUMBER(P,S)		       NUMERIC[(P,S)], DECIMAL[(P,S)] (NOTE1)
+
+NUMBER(38)                     INTEGER, INT, SMALLINT
+
+FLOAT(126)		       FLOAT(NOTE2), DOUBLE PRECISION(NOTE3), REAL(NOTE4)
+FLOAT(63)
+
+NA MODELAGEM LÓGICA DEFINIMOS OS TIPOS DE DADOS NO PADRÃO ANSI, AO MIGRAR PARA O PADRÃO ORACLE, A EQUIVALÊNCIA É FEITA AUTOMATICAMENTE
+
+
+
+CHAR QUANDO SABEMOS O TAMANHO DAS INFORMAÇÕES Q SERÃO GUARDADAS
+VARCHAR QUANDO NÃO SABEMOS O TAMANHO DAS INFORMAÇÕES.
+
+
+
+* ONDE CRIAMOS A ESTRUTURA DO BANCO DE DADOS
+* CONSTRAINS SÃO REGRAS DE NEGÓCIO OU RESTRIÇÕES QUE SÃO IMPOSTAS A ESTRUTURA DE ARMAZEMANENTO GARATINDO UMA ESTRUTURA CORETA. EXEMPLOS: CHAVE PRIMÁRIA, CHAVE ESTRANGEIRA, CAMPO COM CONTEÚDO OBRIGATÓRIO(MANDATÓRIO)(NOT NULL), UNIQUE(O CONEÚDO DA COLUNA NÃO PODE TER REPETIÇÃO, APLICAMOS A CAMPOS QUE NÃO SÃO CHAVE PRIMÁRIA), CHECK(CHECAGEM, VALIDAÇÃO DE CONTEÚDO, PARA GARANTIR QUE POR EXEMPLO O VALOR DE UMA COMISSÃO NÃO PODE SER MENOR QUE O PERCENTUAL DE 2%), DEFAULT(VALORES PADRÃO, QUANDO UM DETERNINADO CONTEÚDO NÃO FOR INFORMADO PODEMOS DEFINIR UM VALOR DEFAULT)
+PK PRIMARY KEY, FK FOREIGN KEY, UN UNIQUE, CK CHECK
+
+TIPOS DE CONSTRAINTS NO ORACLE DATABASE:
+PK – PRIMARY KEY
+FK – FOREIGN KEY
+NOT NULL/ NULL
+UN – UNIQUE CONSTRAINT
+CK – CHECK CONSTRAINT
+DEFAULT – Valor padrão
+
+
+DDL - LINGUAGEM DE DEFINIÇÃO DE DADOS
+
+EXEMPLO: CREATE, DROP, ALTER, RENAME, TRUNCATE, COMMENT
+
+
+DML - LINGUAGEM DE MANIPULAÇÃO DE DADOS
+
+EXEMPLO: INSERT, UPDATE, DELETE
+
+
+DCL - LINGUAGEM DE CONTROLE DE DADOS
+
+EXEMPLO: GRANT, REVOKE.
+
+
+DTL - LINGUAGEM DE TRANSAÇÃO DE DADOS
+
+EXEMPLO: COMMIT, ROLLBACK, SAVEPOINT
+
+
+DQL - LINGAGEM DE CONSULTA DE DADOS OU DRS
+
+EXEMPLOS: SELECT
+
+
+-------------------
+
+UM BANCO DE DADOS É IMPLEMENTADO APÓS A REPRESENTAÇÃO DO MODELO RELACIONAL(FÍSICO) DE DADOS E APLICAÇÃO DA NORMALIZAÇÃO/DESNORMALIZAÇÃO DE DADOS.
+
+É importante salientar que os comandos da linguagem SQL não são sensíveis a letras maiúsculas e minúsculas. O conteúdo armazenado é normalmente sensível a letras maiúsculas e minúsculas, portanto orienta-se atenção durante as comparações de conteúdos alfanuméricos.
+
+
+
+IMPLEMENTAÇÃO DE UM MODELO RELACIONAL PARA COMENDOS SQL:
+
+Durante a transformação do modelo relacional para comandos SQL, entendemos como boa prática a implementação sendo feita da seguinte maneira:
+
+*Criar as tabelas contendo campos, tipos de dados e tamanho, utilizando o comando CREATE TABLE.
+
+*Criar as chaves primárias e demais constraints (exceto chaves estrangeiras), utilizando o comando ALTER TABLE.
+
+*Criar as chaves estrangeiras utilizando o comando ALTER TABLE, após todas as tabelas, respectivas chaves primárias e demais constraints.
+
+A vantagem da escrita realizada desta maneira é que o código fica mais simples de ser lido e mantido.
+
+
+{Exemplos de Criação de tabela:
+
+CREATE TABLE t_sip_departamento (
+    cd_depto NUMBER(3)      NOT NULL,
+    nm_depto VARCHAR2(30)   NOT NULL,
+    sg_depto CHAR(3)        NOT NULL
+);
+
+
+
+-- IMPLEMENTAÇÃO DA PRIMARY KEY COM ALTER TABLE:
+
+   ALTER TABLE t_sip_departamento 
+ADD CONSTRAINT pk_sip_departamento 
+   PRIMARY KEY ( cd_depto );
+
+
+
+
+-- IMPLEMENTAÇÃO DA PRIMARY KEY COM ALTER TABLE:
+
+   ALTER TABLE t_sip_departamento 
+ADD CONSTRAINT pk_sip_departamento 
+   PRIMARY KEY ( cd_depto );
+
+
+-- CONSTRAINT PRIMARY KEY A NIVEL DE TABELA:
+
+CREATE TABLE t_sip_departamento (
+    cd_depto NUMBER(3)      NOT NULL,
+    nm_depto VARCHAR2(30)   NOT NULL,
+    sg_depto CHAR(3)        NOT NULL,
+CONSTRAINT pk_sip_departamento PRIMARY KEY ( cd_depto )    
+);
+
+
+-- CONSTRAINT PRIMARY KEY A NÍVEL DE COLUNA:
+
+CREATE TABLE t_sip_departamento (
+    cd_depto NUMBER(3)      NOT NULL 
+                 CONSTRAINT pk_sip_departamento PRIMARY KEY,
+    nm_depto VARCHAR2(30)   NOT NULL,
+    sg_depto CHAR(3)        NOT NULL
+);
+
+
+-- CONSTRAINT PRIMARY KEY COMPOSTA POR DOIS CAMPOS:
+
+   ALTER TABLE t_sip_dependente 
+ADD CONSTRAINT pk_sip_dependente 
+   PRIMARY KEY ( nr_matricula, cd_dependente );
+
+
+-- IMPLEMENTAÇÃO DA CONSTRAINT UNIQUE:
+
+   ALTER TABLE t_sip_departamento 
+ADD CONSTRAINT un_sip_depto_nome 
+        UNIQUE ( nm_depto );
+
+
+-- IMPLEMENTAÇÃO DA CONSTRAINT CHECK:
+
+   ALTER TABLE t_sip_projeto 
+ADD CONSTRAINT ck_sip_projeto_data 
+         CHECK ( dt_termino > dt_inicio );
+
+
+-- IMPLEMENTAÇÃO DA CONSTRAINT FOREIGN KEY:
+
+   ALTER TABLE t_sip_funcionario
+ADD CONSTRAINT fk_sip_func_depto 
+   FOREIGN KEY ( cd_depto )
+    REFERENCES t_sip_departamento ( cd_depto );
+
+}
+
+-- EXCLUIR A TABELA
+DROP TABLE t_sip_departamento;
+
+
+-- EXCLUIR A TABELA ELIMINANDO AS REFERÊNCIAS
+DROP TABLE t_sip_departamento CASCADE CONSTRAINTS;
+
+
+-- EXCLUIR A TABELA COM PURGE
+DROP TABLE t_sip_departamento PURGE;
+-- EXCLUIR A TABELA COM PURGE, ELIMINANDO AS REFERÊNCIAS
+DROP TABLE t_sip_departamento CASCADE CONSTRAINTS PURGE;
+
+
+-- EXCLUIR TODOS OS DADOS DA TABELA, SEM ELIMINAR A ESTRUTURA
+TRUNCATE TABLE < nome-tabela >;
+
+
+-- COMENTÁRIO SOBRE TABELA E CAMPOS
+COMMENT ON TABLE T_SIP_DEPARTAMENTO IS 'EXEMPLO DE COMENTÁRIO PARA A TABELA';
+COMMENT ON COLUMN T_SIP_DEPARTAMENTO.SG_DEPTO IS 'EXEMPLO DE COMENTÁRIO DE COLUNA';
+
+}
+
+
+
+------------------------------------------------------------------------------------- 
+
+-- SCRIPT PARA CRIAÇÃO DO BANCO DE DADOS 
+-- DO ESTUDO DE CASO SIP
+-- COMANDOS PARA EXCLUIR AS TABELAS
+DROP TABLE t_sip_departamento CASCADE CONSTRAINTS;
+DROP TABLE t_sip_dependente CASCADE CONSTRAINTS;
+DROP TABLE t_sip_funcionario CASCADE CONSTRAINTS;
+DROP TABLE t_sip_implantacao CASCADE CONSTRAINTS;
+DROP TABLE t_sip_projeto CASCADE CONSTRAINTS;
+-- COMANDOS PARA CRIAR AS TABELAS 
+-- E ADICIONAR CONSTRAINTS: PRIMARY KEY, CHECK E UNIQUE
+CREATE TABLE t_sip_departamento (
+    cd_depto NUMBER(3)      NOT NULL,
+    nm_depto VARCHAR2(30)   NOT NULL,
+    sg_depto CHAR(3)        NOT NULL
+);
+COMMENT ON COLUMN t_sip_departamento.cd_depto IS
+    'Um departamento é identificado por um código numérico de três dígitos.';
+   ALTER TABLE t_sip_departamento 
+ADD CONSTRAINT pk_sip_departamento 
+   PRIMARY KEY ( cd_depto );
+   ALTER TABLE t_sip_departamento 
+ADD CONSTRAINT un_sip_depto_nome 
+        UNIQUE ( nm_depto );
+   ALTER TABLE t_sip_departamento 
+ADD CONSTRAINT un_sip_depto_sigla 
+        UNIQUE ( sg_depto );
+CREATE TABLE t_sip_dependente (
+    nr_matricula  NUMBER(5)     NOT NULL,
+    cd_dependente NUMBER(2)     NOT NULL,
+    nm_dependente VARCHAR2(50)  NOT NULL,
+    dt_nascimento DATE          NOT NULL
+);
+   ALTER TABLE t_sip_dependente 
+ADD CONSTRAINT pk_sip_dependente 
+   PRIMARY KEY ( nr_matricula, cd_dependente );
+CREATE TABLE t_sip_funcionario (
+    nr_matricula      NUMBER(5)     NOT NULL,
+    cd_depto          NUMBER(3)     NOT NULL,
+    nm_funcionario    VARCHAR2(50)  NOT NULL,
+    dt_nascimento     DATE          NOT NULL,
+    dt_admissao       DATE          NOT NULL,
+    ds_endereco       VARCHAR2(100) NOT NULL,
+    vl_salario_mensal NUMBER(7, 2) NOT NULL
+);
+   ALTER TABLE t_sip_funcionario 
+ADD CONSTRAINT ck_sip_func_salario 
+         CHECK ( vl_salario_mensal >= 1212 );
+   ALTER TABLE t_sip_funcionario 
+ADD CONSTRAINT pk_sip_funcionario 
+   PRIMARY KEY ( nr_matricula );
+CREATE TABLE t_sip_implantacao (
+    cd_projeto     NUMBER(5) NOT NULL,
+    cd_implantacao NUMBER(3) NOT NULL,
+    nr_matricula   NUMBER(5) NOT NULL,
+    dt_entrada     DATE      NOT NULL,
+    dt_saida       DATE          NULL
+);
+   ALTER TABLE t_sip_implantacao 
+ADD CONSTRAINT ck_sip_implant_data 
+         CHECK ( dt_saida > dt_entrada );
+   ALTER TABLE t_sip_implantacao 
+ADD CONSTRAINT pk_sip_implantacao 
+   PRIMARY KEY ( cd_projeto, cd_implantacao );
+CREATE TABLE t_sip_projeto (
+    cd_projeto NUMBER(5)    NOT NULL,
+    nm_projeto VARCHAR2(40) NOT NULL,
+    dt_inicio  DATE         NOT NULL,
+    dt_termino DATE
+);
+-- ADICIONAR CONSTRAINT FOREIGN KEY
+   ALTER TABLE t_sip_projeto 
+ADD CONSTRAINT ck_sip_projeto_data 
+         CHECK ( dt_termino > dt_inicio );
+   ALTER TABLE t_sip_projeto 
+ADD CONSTRAINT pk_sip_projeto 
+   PRIMARY KEY ( cd_projeto );
+   ALTER TABLE t_sip_projeto 
+ADD CONSTRAINT un_sip_projeto_nome 
+        UNIQUE ( nm_projeto );
+   ALTER TABLE t_sip_dependente
+ADD CONSTRAINT fk_sip_dependente_func 
+   FOREIGN KEY ( nr_matricula )
+    REFERENCES t_sip_funcionario ( nr_matricula );
+   ALTER TABLE t_sip_funcionario
+ADD CONSTRAINT fk_sip_func_depto 
+   FOREIGN KEY ( cd_depto )
+    REFERENCES t_sip_departamento ( cd_depto );
+   ALTER TABLE t_sip_implantacao
+ADD CONSTRAINT fk_sip_implant_func 
+   FOREIGN KEY ( nr_matricula )
+    REFERENCES t_sip_funcionario ( nr_matricula );
+   ALTER TABLE t_sip_implantacao
+ADD CONSTRAINT fk_sip_implant_projeto 
+   FOREIGN KEY ( cd_projeto )
+    REFERENCES t_sip_projeto ( cd_projeto );
+
+--------------------------------------------------------------------
+
+
+SQL COMANDOS DDL:
+
+ALTER TABLE:
+-- Sintaxe:
+ALTER TABLE <nome-tabela>
+DROP COLUMN <nome-coluna>
+ADD 	<nome-coluna> <tipo-do-dado> [NOT NULL]
+[NOT NULL WITH DEFAULT] 
+RENAME <nome-coluna> <novo-nome-coluna>
+MODIFY <nome-coluna> <tipo-do-dado> [NULL]
+[NOT NULL]
+
+DROP COLUMN – Permite eliminar colunas de uma tabela.
+ADD – Permite adicionar colunas ou restrições a uma tabela existente.
+RENAME – Permite renomear a própria tabela, colunas e constraints.
+MODIFY – Permite modificar a estrutura das colunas, como um tipo de dados, tamanho ou restrições.
+
+-------------------
+
+-- ADIÇÃO DE UMA COLUNA A UMA TABELA EXISTENTE
+ALTER TABLE T_TESTE_DDL ADD DS_EMAIL VARCHAR2(80);
+
+
+-- ADIÇÃO DE DUAS OU MAIS COLUNAS A UMA TABELA EXISTENTE
+ALTER TABLE T_TESTE_DDL 
+  ADD ( DS_OBS1 VARCHAR2(50) NOT NULL, 
+        DS_OBS2 VARCHAR2(50) );
+
+
+-- AUMENTANDO O TAMANHO DE UMA COLUNA EM UMA TABELA EXISTENTE
+ALTER TABLE T_TESTE_DDL
+     MODIFY DS_OBS1 VARCHAR2(80);
+
+-- MODIFICANDO O TIPO DE DADO DE UMA COLUNA EM 
+-- UMA TABELA EXISTENTE   
+ALTER TABLE T_TESTE_DDL
+     MODIFY NM_TESTE CHAR(30);
+
+-- MODIFICANDO UMA COLUNA NULL (OPCIONAL) PARA NOT NULL (OBRIGATORIA)
+ALTER TABLE T_TESTE_DDL
+     MODIFY DS_TESTE NOT NULL;
+
+-- MODIFICANDO UMA COLUNA NOT NULL (OBRIGATORIA) 
+-- PARA  NULL (OPCIONAL)
+ALTER TABLE T_TESTE_DDL
+     MODIFY DS_OBS1 NULL;
+
+-- MODIFICANDO TIPO DE DADO, TAMANHO E OBRIGATORIEDADE 
+-- DE UMA COLUNA 
+ALTER TABLE T_TESTE_DDL
+     MODIFY NM_TESTE VARCHAR2(40) NULL;
+
+-- MODIFICANDO UM VALOR DEFAULT
+-- SYSDATE -> FUNÇÃO DO ORACLE QUE RETORNA 
+-- DATA/HORA DO SERVIDOR DE BD
+ALTER TABLE T_TESTE_DDL
+     MODIFY DT_TESTE DEFAULT SYSDATE;
+
+---------------------
+
+-- REMOVENDO UMA COLUNA DA TABELA
+ALTER TABLE T_TESTE_DDL DROP COLUMN DS_OBS2;
+
+
+-- REMOVENDO VÁRIAS COLUNAS DA TABELA
+ALTER TABLE T_TESTE_DDL DROP (DS_TESTE, DS_OBS1);
+
+
+-- REMOVENDO CONSTRAINT CHAVE PRIMÁRIA
+ALTER TABLE T_TESTE_DDL DROP CONSTRAINT PK_TESTE_DDL;
+-- REMOVENDO CONSTRAINT CHAVE PRIMÁRIA COM RELACIONAMENTOS
+ALTER TABLE T_TESTE_DDL DROP CONSTRAINT PK_TESTE_DDL CASCADE;
+
+
+-- REMOVENDO CONSTRAINT CHAVE ESTRANGEIRA
+    ALTER TABLE T_TESTE_DDL
+DROP CONSTRAINT <FK_NOME_CONSTRAINT_FOREIGN_KEY>;
+
+
+-- REMOVENDO CONSTRAINT UNIQUE
+ALTER TABLE T_TESTE_DDL DROP CONSTRAINT UN_TESTE_DDL_NOME;
+
+
+-- REMOVENDO CONSTRAINT CHECK
+ALTER TABLE T_TESTE_DDL 
+DROP CONSTRAINT <CK_NOME_CONSTRAINT_CHECK>;
+
+
+-- REMOVENDO CONSTRAINT DEFAULT
+ALTER TABLE T_TESTE_DDL MODIFY DT_TESTE DEFAULT NULL;
+
+
+-----------------------
+
+-- RENOMEANDO UMA TABELA
+ALTER TABLE T_TESTE_DDL RENAME TO T_TESTE_DDL_NOVO;
+                              nome atual                                      nome novo
+
+
+-- RENOMEANDO UMA COLUNA
+ALTER TABLE T_TESTE_DDL_NOVO RENAME COLUMN 
+            DS_EMAIL TO DS_EMAIL_NOVO;
+                          nome atual              nome novo
+
+
+-- RENOMEANDO UMA CONSTRAINT
+ALTER TABLE T_TESTE_DDL_NOVO RENAME CONSTRAINT
+            UN_TESTE_DDL_NOME TO UN_TESTE_DDL_NOME_NOVO;
+                                     nome atual                                nome novo
+
+
+------------------------
+-- HABILITANDO CONSTRAINTS
+      ALTER TABLE T_TESTE_DDL_NOVO
+ENABLE CONSTRAINT UN_TESTE_DDL_NOME_NOVO;
+
+
+-- DESABILITANDO CONSTRAINTS
+       ALTER TABLE T_TESTE_DDL_NOVO
+DISABLE CONSTRAINT UN_TESTE_DDL_NOME_NOVO;
+
+
+-------------------------
+
+CREATE SEQUENCE nome_sequencia
+[ START WITH num_inicio ]
+[ INCREMENT BY  num_incremento ]
+[ { MAXVALUE  num_maximo | NOMAXVALUE } ]
+[ { MINVALUE  num_minimo | NOMINVALUE } ]
+[ { CYCLE | NOCYCLE} ]
+[ { CACHE   num_cache | NOCACHE } ]
+[ { ORDER | NOORDER } ];
+
+
+
+-- COMENTÁRIOS SOBRE A ESTRUTURA DA SEQUENCE
+CREATE SEQUENCE <nome_da_sequencia>
+     START WITH 1  -- Primeiro número a ser gerado
+   INCREMENT BY 1  -- Valor do incremento (≠ zero)
+     NOMAXVALUE    -- Sem definição de limite máximo
+    CACHE 50 -- O default é "CACHE 20" 
+  NOCYCLE ;  -- Após chegar ao limite, não reinicia
+
+
+-- COMENTÁRIOS SOBRE A ESTRUTURA DA SEQUENCE
+CREATE SEQUENCE <nome_da_sequencia>
+   INCREMENT BY 1   -- Primeiro número a ser gerado
+     START WITH 1   -- Valor do incremento (≠ zero)
+ MAXVALUE 999 –- Valor máximo da sequência
+  NOCACHE     -- sem cache
+    CYCLE; --Após chegar ao limite, reinicia a sequência
+
+
+-- CRIAÇÃO DE TABELA PARA EXEMPLIFICAR SEQUENCES
+-- APAGAR A TABELA PARA TESTES
+DROP TABLE T_TESTE_DDL_SEQUENCE;
+-- CRIAR UMA TABELA PARA TESTES
+CREATE TABLE T_TESTE_DDL_SEQUENCE
+(
+    CD_TESTE_SQ     NUMBER(3)        NOT NULL,
+    NM_TESTE_SQ     VARCHAR2(30)    NOT NULL
+);
+-- ADICIONAR A CONSTRAINT CHAVE PRIMARIA
+   ALTER TABLE T_TESTE_DDL_SEQUENCE 
+ADD CONSTRAINT PK_TESTE_DDL_SEQUENCE 
+   PRIMARY KEY (CD_TESTE_SQ);
+
+
+
+-- CRIAR A SEQUÊNCIA PARA GERAR UM CODIGO AUTO NUMERICO
+CREATE SEQUENCE Q_TESTE_DDL_SEQUENCE
+   INCREMENT BY 1
+  START WITH 1
+    MAXVALUE 999
+     NOCACHE
+     NOCYCLE;
+
+
+
+-- CRIAÇÃO DE TABELA PARA EXEMPLIFICAR SEQUENCES
+-- APAGAR A TABELA PARA TESTES
+DROP TABLE T_TESTE_DDL_SEQUENCE;
+-- CRIAR UMA TABELA PARA TESTES
+CREATE TABLE T_TESTE_DDL_SEQUENCE
+(
+    CD_TESTE_SQ NUMBER(3) 
+        DEFAULT SQ_TESTE_DDL_SEQUENCE.NEXTVAL NOT NULL,
+    NM_TESTE_SQ     VARCHAR2(30)    NOT NULL
+);
+-- ADICIONAR A CONSTRAINT CHAVE PRIMARIA
+   ALTER TABLE T_TESTE_DDL_SEQUENCE 
+ADD CONSTRAINT PK_TESTE_DDL_SEQUENCE 
+   PRIMARY KEY (CD_TESTE_SQ);
+
+
+--------------------------------
+
+-- CONSULTANDO A PSEUDOCOLUNA NEXTVAL
+SELECT SQ_TESTE_DDL_SEQUENCE.NEXTVAL FROM DUAL;
+
+
+-- CONSULTANDO A PSEUDOCOLUNA CURRVAL
+SELECT SQ_TESTE_DDL_SEQUENCE.CURRVAL FROM DUAL;
+
+
+-- INSERÇÃO DE LINHA UTILIZANDO VALORES AUTO NUMÉRICOS DE 
+-- FORMA AUTOMÁTICA
+INSERT INTO T_TESTE_DDL_SEQUENCE 
+     VALUES (SQ_TESTE_DDL_SEQUENCE.NEXTVAL, 'TESTE');
+-- INSERÇÃO DE LINHA UTILIZANDO VALORES AUTO NUMÉRICOS 
+-- DE FORMA AUTOMÁTICA
+-- QUANDO A SEQUÊNCIA É DEFINIDA COMO VALOR DEFAULT PARA O 
+-- CAMPO CHAVE PRIMÁRIA
+INSERT INTO T_TESTE_DDL_SEQUENCE (NM_TESTE_SQ) 
+     VALUES ('TESTE');
+
+
+
+-- ALTERANDO UMA SEQUÊNCIA
+ALTER SEQUENCE SQ_TESTE_DDL_SEQUENCE
+  INCREMENT BY 5
+      MAXVALUE 900;
+
+
+
+-- EXCLUINDO UMA SEQUÊNCIA
+DROP SEQUENCE SQ_TESTE_DDL_SEQUENCE;
+
+
+-- COLUNA IDENTITY CRIADA COM GENERATE ALWAYS
+CREATE TABLE T1 (
+    id INTEGER GENERATED ALWAYS AS IDENTITY
+    (START WITH 2 INCREMENT BY 2 MAXVALUE 200 NO CYCLE),
+    name STRING,
+    PRIMARY KEY (id)
+);
+
+
+-- COLUNA IDENTITY CRIADA COM GENERATE BY DEFAULT
+CREATE TABLE T2 (
+    id LONG GENERATED BY DEFAULT AS IDENTITY
+    (START WITH 1 INCREMENT BY 1 CYCLE CACHE 200),
+    account_id INTEGER,
+    name STRING,
+    PRIMARY KEY (account_id)
+);
+
+
+
+-- EXEMPLO COMPLETO DE DEFINIÇÃO E USO DO IDENTITY
+-- EXCLUSÃO DA TABELA EXEMPLO
+DROP TABLE T_TESTE_IDENTITY;
+-- CRIAÇÃO DA TABELA INDICANDO A COLUNA IDENTITY
+CREATE TABLE T_TESTE_IDENTITY (
+  ID_TESTE          NUMBER(5) GENERATED ALWAYS AS IDENTITY,
+  DESC_TESTE        VARCHAR2(30)
+);
+-- DEFINIÇÃO DA CHAVE PRIMÁRIA
+   ALTER TABLE T_TESTE_IDENTITY
+ADD CONSTRAINT PK_TESTE_IDENTITY
+   PRIMARY KEY (ID_TESTE);
+-- INSERÇÃO A PARTIR DA COLUNA IDENTITY
+INSERT INTO T_TESTE_IDENTITY (DESC_TESTE) VALUES ('TESTE ID');
+-- CONSULTA AOS DADOS DA TABELA DE EXEMPLO
+SELECT * FROM T_TESTE_IDENTITY;
+
+-----------------------------
+
+
+

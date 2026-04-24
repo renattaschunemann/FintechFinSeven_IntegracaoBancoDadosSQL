@@ -1,0 +1,176 @@
+LIVE 01/04/2026 - ORACLE DDL
+
+-- Listando tabelas do usuário
+select * from tab;
+select table_name from user_tables;
+ 
+---
+-- BLOCO 2 - Tipos de dados de texto
+---
+ 
+DROP TABLE N1 PURGE;
+ 
+CREATE TABLE n1
+(texto1 CHAR(10), // NO CHAR SE O NOME TIVER 3 CARACTERES O RESTANTE ELE VAI PREENCHER COM ESPAÇOS EM BRANCO APÓS O NOME
+Texto2 VARCHAR2(10)); // O VARCHAR JÁ FAZ ARMAZENA SOMENTE O NOME ANA, DEIXANDO APENAS O QUE REALMENTE FOI DIGITADO
+ 
+Insert into n1 values ('ANA','ANA');
+ 
+-- Comparação de armazenamento interno
+SELECT DUMP(texto1), DUMP(texto2) FROM N1;
+ 
+-- Testes com caracteres especiais
+INSERT INTO N1 values ('diligência','diligência');
+SELECT * FROM N1;
+INSERT INTO N1 values ('diligênci','diligência');
+SELECT * FROM N1;
+INSERT INTO N1 values ('diligênci','diligênci');
+SELECT * FROM N1;
+ 
+---
+-- BLOCO 3 - Unicode
+---
+ 
+DROP TABLE N1 PURGE;
+ 
+CREATE TABLE n1
+(texto1 NCHAR(10),
+Texto2 NVARCHAR2(10));
+ 
+Insert into n1 values ('ANA','ANA');
+ 
+SELECT DUMP(texto1), DUMP(texto2) FROM N1;
+ 
+---
+-- BLOCO 4 - Controle transacional
+---
+ 
+SELECT * FROM n1;
+ 
+COMMIT;
+ 
+DELETE n1;
+ 
+SELECT * FROM n1;
+ 
+ROLLBACK;
+ 
+SELECT * FROM n1;
+ 
+TRUNCATE TABLE n1;
+ 
+SELECT * FROM n1;
+ 
+-- Observação: TRUNCATE não permite rollback efetivo
+ROLLBACK;
+ 
+SELECT * FROM n1;
+ 
+DROP TABLE n1 purge;
+ 
+---
+-- BLOCO 5 - Tipos numéricos
+---
+ 
+Create table n1 (numero number);
+Insert into n1 values (4.56);
+Select * from n1;
+ 
+DROP TABLE n1 purge;
+ 
+Create table n1 (numero number(4,2));
+Insert into n1 values (4.56);
+Select * from n1;
+ 
+DROP TABLE n1 purge;
+ 
+Create table n1 (numero number(2));
+Insert into n1 values (4.56);
+Select * from n1;
+ 
+DROP TABLE n1 purge;
+ 
+Create table n1 (numero number(5,2));
+Insert into n1 values (4.56);
+Insert into n1 values (4.5678);
+Select * from n1;
+ 
+DROP TABLE n1 purge;
+ 
+Create table n1 (numero number(3));
+Insert into n1 values (10.56);
+ 
+DROP TABLE n1 purge;
+ 
+Create table n1 (numero number(5,-2));
+Insert into n1 values (1056.34);
+ 
+SELECT * from n1;
+ 
+drop table n1 purge;
+ 
+---
+-- BLOCO 6 - Integridade: PRIMARY KEY + ALTER TABLE
+---
+ 
+CREATE TABLE N1
+(CODIGO NUMBER(4),
+NOME   VARCHAR2(30),
+CONSTRAINT n1_codigo_pk PRIMARY KEY (codigo));
+ 
+-- válido
+INSERT INTO N1 VALUES (10,'TESTE');
+ 
+-- erro esperado: PK duplicada
+INSERT INTO N1 VALUES (10,'TESTE');
+ 
+ALTER TABLE N1 ADD HOJE DATE;
+ALTER TABLE N1 MODIFY HOJE VARCHAR2(30);
+ALTER TABLE N1 MODIFY HOJE NUMBER;
+ 
+INSERT INTO N1 VALUES (11,'TESTE', NULL);
+ 
+ALTER TABLE N1 MODIFY HOJE DATE;
+ 
+INSERT INTO N1 VALUES (12,'TESTE', SYSDATE);
+ 
+ALTER TABLE N1 MODIFY HOJE NUMBER;
+ 
+---
+-- BLOCO 7 - Integridade referencial (FOREIGN KEY)
+---
+ 
+CREATE TABLE N2
+(ID   NUMBER CONSTRAINT N2_ID_PK PRIMARY KEY,
+NOME VARCHAR2(20) NOT NULL,
+CODIGO NUMBER(4),
+CONSTRAINT N1_CODIGO_FK FOREIGN KEY (CODIGO) REFERENCES N1(CODIGO));
+ 
+-- válido
+INSERT INTO N2 VALUES (1024, 'TESTE', 10);
+ 
+-- erro esperado: chave estrangeira inexistente
+INSERT INTO N2 VALUES (1025, 'TESTE', 20);
+ 
+drop table n2 purge;
+drop table n1 purge;
+ 
+---
+-- BLOCO 8 - CHECK CONSTRAINT
+---
+ 
+CREATE TABLE FORNECEDORES
+(FORNECEDOR_ID NUMBER CONSTRAINT FORNECEDOR_ID_PK PRIMARY KEY,
+FORNECEDOR_NOME VARCHAR2(20) NOT NULL,
+STATUS NUMBER(1) CONSTRAINT STATUS_NN NOT NULL,
+CATEGORIA VARCHAR2(20),
+CONSTRAINT STATUS_CK CHECK (STATUS IN (4, 5)),
+CONSTRAINT CATEGORIA_CK CHECK
+(CATEGORIA IN ('Ativo','Inativo','Suspenso')));
+ 
+-- erros esperados
+INSERT INTO FORNECEDORES VALUES (10, 'NOME', 3, 'Alvo');
+INSERT INTO FORNECEDORES VALUES (10, 'NOME', 3, 'Ativo');
+ 
+-- válido
+INSERT INTO FORNECEDORES VALUES (10, 'NOME', 4, 'Ativo');
