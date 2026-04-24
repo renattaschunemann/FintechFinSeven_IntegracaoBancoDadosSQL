@@ -1,8 +1,7 @@
-package view;
-import factory.ConnectionFactory;
+package br.com.fiap.fintech.finseven.view;
+import br.com.fiap.fintech.finseven.factory.ConnectionFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 public class Main
 {
