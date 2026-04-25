@@ -1,29 +1,35 @@
 package br.com.fiap.fintech.finseven.model;
 
 public class Usuario {
-    private String nome;
-    private int cpf;
-    private Endereco endereco;
-    private Login login;
+
+        private Long id;
+        private String nome;
+        private Long cpf;
+        private String email;
 
 
     public Usuario() {
     }
 
-
-    public Usuario(String nome, int cpf, Endereco endereco, Login login) {
+    public Usuario(Long id, String nome, Long cpf, String email) {
+        this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.endereco = endereco;
-        this.login = login;
+        this.email = email;
     }
 
-    public Endereco getEndereco() {
-        return endereco;
+    public Usuario(String nome, Long cpf, String email) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
     }
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -34,54 +40,21 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public int getCpf() {
+    public Long getCpf() {
         return cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(Long cpf) {
         this.cpf = cpf;
     }
 
-    public Login getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(Login login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
-
-    public void cadastrarUsuario(String nome, int dtNasc, Endereco endereco, Login login) {
-        this.nome = nome;
-        this.cpf = dtNasc;
-        this.endereco = endereco;
-        this.login = login;
-        System.out.println("Usuário cadastrado com sucesso!");
-
-    }
-
-    public void atualizarUsuario(String nome, int cpf) {
-        this.nome = nome;
-        this.cpf = cpf;
-
-
-        System.out.println("Dados do usuário atualizados com sucesso.");
-    }
-
-    public void exibirDadosUsuario() {
-        System.out.println("\n-----Dados do usuário-----");
-        System.out.println("Nome: " + nome
-                + "\n CPF: " + cpf
-                // + "\n Endereço: " + endereco (exibição do endereço no método exibirEndereço)
-                + "\n Id do usuário: " + login.getIdLogin()
-                + "\nEmail do usuário:" + login.getEmail());
-
-
-    }
-
-    public void deletarEndereco() {
-        this.endereco = null;
-        System.out.println("Endereço removido do perfil do usuário.");
-    }
-
 }
+
+

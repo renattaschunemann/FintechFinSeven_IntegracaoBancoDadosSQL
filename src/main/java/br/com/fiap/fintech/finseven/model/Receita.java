@@ -2,24 +2,35 @@ package br.com.fiap.fintech.finseven.model;
 
 import java.time.LocalDate;
 
-public class Receita extends Movimentacao {
-    private String fonte;
+public class Receita {
+    private long idTransacao;
+    private String origem;
 
-    public Receita(String descricao, double valor, LocalDate data, Categoria categoria, String fonte) {
-        super(descricao, valor, data, TipoMovimentacao.RECEITA, categoria);
-        this.fonte = fonte;
-    }
-    public Receita(){
-        super();
-    }
-    public String getFonte() { return fonte; }
-
-    public void setFonte(String fonte) { this.fonte = fonte; }
-
-    @Override
-    public void exibirMovimentacao() {
-        super.exibirMovimentacao();
-        System.out.println("Fonte da Receita: " + fonte);
+    public Receita() {
     }
 
+    public Receita(long idTransacao, String origem) {
+        this.idTransacao = idTransacao;
+        this.origem = origem;
+    }
+
+    public Receita(String origem) {
+        this.origem = origem;
+    }
+
+    public String getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(String origem) {
+        this.origem = origem;
+    }
+
+    public long getIdTransacao() {
+        return idTransacao;
+    }
+
+    public void setIdTransacao(long idTransacao) {
+        this.idTransacao = idTransacao;
+    }
 }

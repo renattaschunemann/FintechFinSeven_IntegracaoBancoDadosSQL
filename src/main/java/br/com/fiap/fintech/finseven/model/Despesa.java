@@ -2,34 +2,36 @@ package br.com.fiap.fintech.finseven.model;
 
 import java.time.LocalDate;
 
-public class Despesa extends  Movimentacao{
-    private String metodoPagamento;
+public class Despesa{
 
+    private long idTransacao;
+    private String formaPagamento;
 
-    public Despesa(){
-        super();
+    public Despesa() {
     }
 
-
-    public Despesa(String descricao, double valor, LocalDate data, Categoria categoria, String metodoPagamento) {
-
-        super(descricao, valor, data, TipoMovimentacao.DESPESA, categoria);
-        this.metodoPagamento = metodoPagamento;
+    public Despesa(long idTransacao, String formaPagamento) {
+        this.idTransacao = idTransacao;
+        this.formaPagamento = formaPagamento;
     }
 
-    public String getMetodoPagamento() {
-        return metodoPagamento;
+    public Despesa(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
 
-    public void setMetodoPagamento(String metodoPagamento) {
-        this.metodoPagamento = metodoPagamento;
+    public long getIdTransacao() {
+        return idTransacao;
     }
 
-    // Polimorfismo: Sobrescrevendo o método para exibir o dado específico de Despesa
-    @Override
-    public void exibirMovimentacao() {
-        super.exibirMovimentacao();
-        System.out.println("Forma de Pagamento: " + metodoPagamento);
+    public void setIdTransacao(long idTransacao) {
+        this.idTransacao = idTransacao;
+    }
 
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
 }
