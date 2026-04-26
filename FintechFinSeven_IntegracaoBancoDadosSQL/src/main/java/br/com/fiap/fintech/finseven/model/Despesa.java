@@ -1,6 +1,5 @@
 package br.com.fiap.fintech.finseven.model;
 
-import java.time.LocalDate;
 
 public class Despesa{
 
