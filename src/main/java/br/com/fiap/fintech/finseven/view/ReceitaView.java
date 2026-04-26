@@ -1,9 +1,7 @@
 package br.com.fiap.fintech.finseven.view;
 
 import br.com.fiap.fintech.finseven.dao.ReceitaDao;
-import br.com.fiap.fintech.finseven.dao.TransacaoDao;
 import br.com.fiap.fintech.finseven.model.Receita;
-import br.com.fiap.fintech.finseven.model.Transacao;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,16 +13,15 @@ public class ReceitaView {
         Scanner scan = new Scanner(System.in);
 
         try {
-            TransacaoDao transacaoDao = new TransacaoDao();
             ReceitaDao dao = new ReceitaDao();
             int opcao = -1;
 
             while (opcao != 0) {
-                System.out.println("\n--- MENU TRANSAÇÕES FINSEVEN ---");
+                System.out.println("\n--- MENU RECEITAS FINSEVEN ---");
                 System.out.println("1 - Cadastrar Receita");
-                System.out.println("2 - Atualizar Transação");
-                System.out.println("3 - Exibir todas as transações");
-                System.out.println("4 - Pesquisar transação por ID");
+                System.out.println("2 - Atualizar Receita");
+                System.out.println("3 - Exibir todas as receitas");
+                System.out.println("4 - Pesquisar receitas por ID");
                 System.out.println("0 - Sair");
                 System.out.print("Escolha uma opção: ");
 
@@ -60,35 +57,35 @@ public class ReceitaView {
                         break;
 
                     case 2:
-                        System.out.println("\n-- Atualizar Transação --");
-                        System.out.print("ID da transação que deseja alterar: ");
+                        System.out.println("\n-- Atualizar Receita --");
+                        System.out.print("ID da receita que deseja alterar: ");
                         long idAlt = scan.nextLong();
                         System.out.print("Novo Valor: ");
                         double nValor = scan.nextDouble();
                         scan.nextLine(); // Buffer
                         System.out.print("Nova Descrição: ");
                         String nDesc = scan.nextLine();
-                        System.out.print("Novo Tipo: ");
-                        String nTipo = scan.nextLine();
+                        System.out.print("Nova Origem: ");
+                        String nOrigem = scan.nextLine();
 
-                        Transacao tAtu = new Transacao();
-                        tAtu.setId(idAlt);
-                        tAtu.setValor(nValor);
-                        tAtu.setDescricao(nDesc);
-                        tAtu.setTipo(nTipo);
-                        tAtu.setData(java.time.LocalDate.now());
+                        Receita receitaAtual = new Receita();
+                        receitaAtual.setId(idAlt);
+                        receitaAtual.setValor(nValor);
+                        receitaAtual.setDescricao(nDesc);
+                        receitaAtual.setData(java.time.LocalDate.now());
+                        receitaAtual.setOrigem(nOrigem);
 
-                        //dao.atualizar(tAtu);
+                        dao.atualizar(receitaAtual);
                         break;
 
                     case 3:
-                        System.out.println("\n-- Listagem Geral --");
+                        System.out.println("\n-- Receitas Cadastradas--");
                         // Aqui assume-se que você tem o método listar() no seu DAO
-                        List<Transacao> lista = transacaoDao.pesquisarTodos();
+                        List<Receita> lista = dao.pesquisarTodos();
                         if (lista.isEmpty()) {
-                            System.out.println("Nenhuma transação encontrada.");
+                            System.out.println("Nenhuma receita encontrada.");
                         } else {
-                            for (Transacao item : lista) {
+                            for (Receita item : lista) {
                                 System.out.println("ID: " + item.getId() + " | " + item.getDescricao() + " | R$ " + item.getValor());
                             }
                         }
@@ -96,22 +93,23 @@ public class ReceitaView {
 
                     case 4:
                         System.out.println("\n-- Pesquisar por ID --");
-                        System.out.print("Digite o ID da transação: ");
+                        System.out.print("Digite o ID da receita: ");
                         long idPesquisa = scan.nextLong();
                         scan.nextLine(); // Buffer
 
                         // Utiliza o método pesquisar que você criou no DAO
-                        Transacao tEncontrada = transacaoDao.pesquisar(idPesquisa);
+                        Receita receitaEncontrada = dao.pesquisar(idPesquisa);
 
-                        if (tEncontrada != null) {
+                        if (receitaEncontrada != null) {
                             System.out.println("\n--- Registro Localizado ---");
-                            System.out.println("ID: " + tEncontrada.getId());
-                            System.out.println("Valor: R$ " + tEncontrada.getValor());
-                            System.out.println("Data: " + tEncontrada.getData());
-                            System.out.println("Descrição: " + tEncontrada.getDescricao());
-                            System.out.println("Tipo: " + tEncontrada.getTipo());
+                            System.out.println("ID: " + receitaEncontrada.getId());
+                            System.out.println("Valor: R$ " + receitaEncontrada.getValor());
+                            System.out.println("Data: " + receitaEncontrada.getData());
+                            System.out.println("Descrição: " + receitaEncontrada.getDescricao());
+                            System.out.println("Tipo: " + receitaEncontrada.getTipo());
+                            System.out.println("Origem: " + receitaEncontrada.getOrigem());
                         } else {
-                            System.out.println("\n[!] Transação com ID " + idPesquisa + " não encontrada.");
+                            System.out.println("\n[!] Receita com ID " + idPesquisa + " não encontrada.");
                         }
                         break;
 

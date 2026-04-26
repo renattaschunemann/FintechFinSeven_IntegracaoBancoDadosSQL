@@ -45,14 +45,12 @@ public class TransacaoDao {
     }
 
     public void atualizar(Transacao transacao) throws SQLException {
-
-        PreparedStatement stmt = conexao.prepareStatement("UPDATE T_FINSEVEN_TRANSACAO SET VLR_TRANSACAO = ?, DT_TRANSACAO = ?, DS_TRANSACAO = ?, TP_TRANSACAO = ? " +
+        PreparedStatement stmt = conexao.prepareStatement("UPDATE T_FINSEVEN_TRANSACAO SET VLR_TRANSACAO = ?, DT_TRANSACAO = ?, DS_TRANSACAO = ? " +
                 "WHERE ID_TRANSACAO = ?");
         stmt.setDouble(1, transacao.getValor());
-        stmt.setDate(2, transacao.getData());
+        stmt.setDate(2, new java.sql.Date(transacao.getData().getTime()));
         stmt.setString(3, transacao.getDescricao());
-        stmt.setString(4, transacao.getTipo());
-        stmt.setLong(5, transacao.getId());
+        stmt.setLong(4, transacao.getId());
 
         int linhas = stmt.executeUpdate();
         if (linhas > 0) {
