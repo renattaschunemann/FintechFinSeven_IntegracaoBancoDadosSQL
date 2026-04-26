@@ -16,7 +16,7 @@ public class TransacaoDao {
         conexao = ConnectionFactory.getConnection();
     }
 
-    public Transacao cadastrar(Transacao transacao) throws SQLException {
+    public Transacao insert(Transacao transacao) throws SQLException {
 
         String[] idMapeado = {"ID_TRANSACAO"};
         PreparedStatement stmt = conexao.prepareStatement("INSERT INTO T_FINSEVEN_TRANSACAO (ID_TRANSACAO, ID_BANCO, ID_CATEGORIA, VLR_TRANSACAO, DT_TRANSACAO, DS_TRANSACAO, TP_TRANSACAO) " +

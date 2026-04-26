@@ -1,29 +1,32 @@
 package br.com.fiap.fintech.finseven.model;
 
 
-public class Despesa{
+public class Despesa extends Transacao{
 
-    private long idTransacao;
     private String formaPagamento;
 
     public Despesa() {
+        super();
+    }
+
+    public Despesa(Transacao transacao) {
+        super(transacao.getId(),
+                transacao.getIdBanco(),
+                transacao.getIdCategoria(),
+                transacao.getValor(),
+                transacao.getData().toLocalDate(),
+                transacao.getDescricao(),
+                transacao.getTipo());
+    }
+
+    public Despesa(Transacao transacao, String formaPagamento) {
+        this(transacao);
+        this.formaPagamento = formaPagamento;
     }
 
     public Despesa(long idTransacao, String formaPagamento) {
-        this.idTransacao = idTransacao;
+        this.setId(idTransacao);
         this.formaPagamento = formaPagamento;
-    }
-
-    public Despesa(String formaPagamento) {
-        this.formaPagamento = formaPagamento;
-    }
-
-    public long getIdTransacao() {
-        return idTransacao;
-    }
-
-    public void setIdTransacao(long idTransacao) {
-        this.idTransacao = idTransacao;
     }
 
     public String getFormaPagamento() {
