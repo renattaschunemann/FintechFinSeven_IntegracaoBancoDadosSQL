@@ -1,5 +1,6 @@
 package br.com.fiap.fintech.finseven.model;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Transacao {
@@ -52,8 +53,8 @@ public class Transacao {
         this.descricao = descricao;
     }
 
-    public LocalDate getData() {
-        return data;
+    public Date getData() {
+        return Date.valueOf(data);
     }
 
     public void setData(LocalDate data) {

@@ -10,8 +10,23 @@ public class Receita extends Transacao {
         super();
     }
 
-    public Receita(Long idBanco, Long idCategoria, Double valor, LocalDate data, String descricao, String tipo, String origem) {
-        super(idBanco, idCategoria, valor, data, descricao, tipo);
+    public Receita(Transacao transacao) {
+        super(transacao.getId(),
+                transacao.getIdBanco(),
+                transacao.getIdCategoria(),
+                transacao.getValor(),
+                transacao.getData().toLocalDate(),
+                transacao.getDescricao(),
+                transacao.getTipo());
+    }
+
+    public Receita(Transacao transacao, String origem) {
+        this(transacao);
+        this.origem = origem;
+    }
+
+    public Receita(long idTransacao, String origem) {
+        this.setId(idTransacao);
         this.origem = origem;
     }
 

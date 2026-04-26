@@ -3,7 +3,7 @@ package br.com.fiap.fintech.finseven.model;
 public class Categoria {
     private Long id;
     private String descricao;
-    private String tiposTransacao;
+    private String tipoTransacao;
 
     public Categoria() {
     }
@@ -11,12 +11,12 @@ public class Categoria {
     public Categoria(Long id, String descricao, String tiposTransacao) {
         this.id = id;
         this.descricao = descricao;
-        this.tiposTransacao = tiposTransacao;
+        this.tipoTransacao = tiposTransacao;
     }
 
     public Categoria(String descricao, String tiposTransacao) {
         this.descricao = descricao;
-        this.tiposTransacao = tiposTransacao;
+        this.tipoTransacao = tiposTransacao;
     }
 
     public Long getId() {
@@ -36,11 +36,11 @@ public class Categoria {
     }
 
     public String getTiposTransacao() {
-        return tiposTransacao;
+        return tipoTransacao;
     }
 
     public void setTiposTransacao(String tiposTransacao) {
-        this.tiposTransacao = tiposTransacao;
+        this.tipoTransacao = tiposTransacao;
     }
 
 
