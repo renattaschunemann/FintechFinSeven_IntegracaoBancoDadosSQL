@@ -126,7 +126,7 @@ public class ReceitaView {
                     case 5:
                         System.out.print("\nID da receita para remover: ");
                         long idRem = scan.nextLong();
-                        dao.remover(idRem);
+                        dao.remove(idRem);
                         System.out.println("Removido com sucesso!");
                         break;
 

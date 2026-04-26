@@ -44,7 +44,7 @@ public class TransacaoDao {
 
     }
 
-    public void atualizar(Transacao transacao) throws SQLException {
+    public void update(Transacao transacao) throws SQLException {
         PreparedStatement stmt = conexao.prepareStatement("UPDATE T_FINSEVEN_TRANSACAO SET VLR_TRANSACAO = ?, DT_TRANSACAO = ?, DS_TRANSACAO = ? " +
                 "WHERE ID_TRANSACAO = ?");
         stmt.setDouble(1, transacao.getValor());
@@ -60,7 +60,7 @@ public class TransacaoDao {
         }
     }
 
-    public Transacao pesquisar(long id) throws SQLException {
+    public Transacao searchById(long id) throws SQLException {
         PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM T_FINSEVEN_TRANSACAO WHERE ID_TRANSACAO = ?");
         stmt.setLong(1, id);
 
@@ -81,7 +81,7 @@ public class TransacaoDao {
         return transacao;
     }
 
-    public List<Transacao> pesquisarTodos() throws SQLException {
+    public List<Transacao> getAll() throws SQLException {
         List<Transacao> lista = new ArrayList<>();
         // SQL para selecionar todos os registros da tabela
         String sql = "SELECT * FROM T_FINSEVEN_TRANSACAO ORDER BY DT_TRANSACAO DESC";
@@ -89,7 +89,7 @@ public class TransacaoDao {
         try (PreparedStatement stmt = conexao.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            // O while percorre todas as linhas retornadas pelo banco
+
             while (rs.next()) {
                 Transacao transacao = new Transacao();
                 transacao.setId(rs.getLong("ID_TRANSACAO"));
@@ -97,7 +97,7 @@ public class TransacaoDao {
                 transacao.setIdCategoria(rs.getLong("ID_CATEGORIA"));
                 transacao.setValor(rs.getDouble("VLR_TRANSACAO"));
 
-                // Converte a data do banco para LocalDate conforme seu modelo [cite: 126]
+
                 if (rs.getDate("DT_TRANSACAO") != null) {
                     transacao.setData(rs.getDate("DT_TRANSACAO").toLocalDate());
                 }
@@ -105,7 +105,7 @@ public class TransacaoDao {
                 transacao.setDescricao(rs.getString("DS_TRANSACAO"));
                 transacao.setTipo(rs.getString("TP_TRANSACAO"));
 
-                // Adiciona o objeto preenchido na lista
+
                 lista.add(transacao);
             }
         }
