@@ -2,15 +2,16 @@ package br.com.fiap.fintech.finseven.model;
 
 import java.time.LocalDate;
 
-public class Receita {
-    private long idTransacao;
+public class Receita extends Transacao {
+
     private String origem;
 
     public Receita() {
+        super();
     }
 
     public Receita(long idTransacao, String origem) {
-        this.idTransacao = idTransacao;
+        this.setId(idTransacao);
         this.origem = origem;
     }
 
@@ -24,13 +25,5 @@ public class Receita {
 
     public void setOrigem(String origem) {
         this.origem = origem;
-    }
-
-    public long getIdTransacao() {
-        return idTransacao;
-    }
-
-    public void setIdTransacao(long idTransacao) {
-        this.idTransacao = idTransacao;
     }
 }

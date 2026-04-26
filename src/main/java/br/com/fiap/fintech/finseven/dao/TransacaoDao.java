@@ -16,11 +16,11 @@ public class TransacaoDao {
         conexao = ConnectionFactory.getConnection();
     }
 
-    public void cadastrar(Transacao transacao) throws SQLException {
+    public Transacao cadastrar(Transacao transacao) throws SQLException {
 
-        PreparedStatement stmt = conexao.prepareStatement("INSERT INTO T_FINSEVEN_TRANSACAO (ID_TRANSACAO, ID_BANCO,ID_CATEGORIA,VLR_TRANSACAO," +
-                "DT_TRANSACAO,DS_TRANSACAO,TP_TRANSACAO) " +
-                "VALUES (SQ_FINSEVEN_TRANSACAO.NEXTVAL, ?, ?,?,?,?,?)");
+        String[] idMapeado = {"ID_TRANSACAO"};
+        PreparedStatement stmt = conexao.prepareStatement("INSERT INTO T_FINSEVEN_TRANSACAO (ID_TRANSACAO, ID_BANCO, ID_CATEGORIA, VLR_TRANSACAO, DT_TRANSACAO, DS_TRANSACAO, TP_TRANSACAO) " +
+                "VALUES (SQ_FINSEVEN_TRANSACAO.NEXTVAL, ?, ?, ?, ?, ?, ?)", idMapeado);
 
         stmt.setLong(1, transacao.getIdBanco());
         stmt.setLong(2, transacao.getIdCategoria());
@@ -32,15 +32,22 @@ public class TransacaoDao {
 
         stmt.executeUpdate();
         System.out.println("Transação cadastrada com sucesso!");
+
+        ResultSet generatedKeys = stmt.getGeneratedKeys();
+        if (generatedKeys.next()) {
+            transacao.setId(generatedKeys.getLong(1));
+        }
+
         stmt.close();
 
-        System.out.println("Categoria cadastrada com sucesso!");
+        return transacao;
+
     }
 
     public void atualizar(Transacao transacao) throws SQLException {
 
         PreparedStatement stmt = conexao.prepareStatement("UPDATE T_FINSEVEN_TRANSACAO SET VLR_TRANSACAO = ?, DT_TRANSACAO = ?, DS_TRANSACAO = ?, TP_TRANSACAO = ? " +
-                "WHERE ID_TRANSACAO = ?)");
+                "WHERE ID_TRANSACAO = ?");
         stmt.setDouble(1, transacao.getValor());
         stmt.setDate(2, transacao.getData());
         stmt.setString(3, transacao.getDescricao());

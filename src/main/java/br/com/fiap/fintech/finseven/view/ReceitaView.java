@@ -1,24 +1,27 @@
 package br.com.fiap.fintech.finseven.view;
 
+import br.com.fiap.fintech.finseven.dao.ReceitaDao;
 import br.com.fiap.fintech.finseven.dao.TransacaoDao;
+import br.com.fiap.fintech.finseven.model.Receita;
 import br.com.fiap.fintech.finseven.model.Transacao;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-public class TransacaoView {
+public class ReceitaView {
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
         try {
-            TransacaoDao dao = new TransacaoDao();
+            TransacaoDao transacaoDao = new TransacaoDao();
+            ReceitaDao dao = new ReceitaDao();
             int opcao = -1;
 
             while (opcao != 0) {
                 System.out.println("\n--- MENU TRANSAÇÕES FINSEVEN ---");
-                System.out.println("1 - Cadastrar Transação");
+                System.out.println("1 - Cadastrar Receita");
                 System.out.println("2 - Atualizar Transação");
                 System.out.println("3 - Exibir todas as transações");
                 System.out.println("4 - Pesquisar transação por ID");
@@ -33,25 +36,27 @@ public class TransacaoView {
                         System.out.println("\n-- Novo Lançamento --");
                         System.out.print("ID do Banco: 3-Bradesco/4-Nubank/6-Mercado Pago");
                         long idBanco = scan.nextLong();
-                        System.out.print("ID da Categoria: 1-Receita/2-Despesa/3-Investimento ");
+                        System.out.print("ID da Categoria do tipo Receita:");
                         long idCat = scan.nextLong();
                         System.out.print("Valor: ");
                         double valor = scan.nextDouble();
                         scan.nextLine();
                         System.out.print("Descrição: ");
                         String desc = scan.nextLine();
-                        System.out.print("Tipo (RECEITA/DESPESA/INVESTIMENTO): ");
-                        String tipo = scan.nextLine();
+                        System.out.print("Origem da Receita: ");
+                        String origem = scan.nextLine();
+                        String tipo = "RECEITA";
 
-                        Transacao transacao = new Transacao();
-                        transacao.setIdBanco(idBanco);
-                        transacao.setIdCategoria(idCat);
-                        transacao.setValor(valor);
-                        transacao.setDescricao(desc);
-                        transacao.setTipo(tipo);
-                        transacao.setData(java.time.LocalDate.now());
+                        Receita receita = new Receita();
+                        receita.setIdBanco(idBanco);
+                        receita.setIdCategoria(idCat);
+                        receita.setValor(valor);
+                        receita.setDescricao(desc);
+                        receita.setTipo(tipo);
+                        receita.setData(java.time.LocalDate.now());
+                        receita.setOrigem(origem);
 
-                        dao.cadastrar(transacao);
+                        dao.cadastrar(receita);
                         break;
 
                     case 2:
@@ -73,13 +78,13 @@ public class TransacaoView {
                         tAtu.setTipo(nTipo);
                         tAtu.setData(java.time.LocalDate.now());
 
-                        dao.atualizar(tAtu);
+                        //dao.atualizar(tAtu);
                         break;
 
                     case 3:
                         System.out.println("\n-- Listagem Geral --");
                         // Aqui assume-se que você tem o método listar() no seu DAO
-                        List<Transacao> lista = dao.pesquisarTodos();
+                        List<Transacao> lista = transacaoDao.pesquisarTodos();
                         if (lista.isEmpty()) {
                             System.out.println("Nenhuma transação encontrada.");
                         } else {
@@ -96,7 +101,7 @@ public class TransacaoView {
                         scan.nextLine(); // Buffer
 
                         // Utiliza o método pesquisar que você criou no DAO
-                        Transacao tEncontrada = dao.pesquisar(idPesquisa);
+                        Transacao tEncontrada = transacaoDao.pesquisar(idPesquisa);
 
                         if (tEncontrada != null) {
                             System.out.println("\n--- Registro Localizado ---");
