@@ -20,7 +20,7 @@ public class ReceitaDao {
     }
 
     public void insert(Receita receita) throws SQLException {
-        transacaoDao.cadastrar(receita);
+        transacaoDao.insert(receita);
 
         PreparedStatement stmt = conexao.prepareStatement("INSERT INTO T_FINSEVEN_RECEITA (ID_TRANSACAO, ORIGEM_RECEITA) VALUES (?, ?)");
 

@@ -41,7 +41,7 @@ public class BancoView {
 
                     case 2:
                         System.out.println("\n-- Contas Cadastradas --");
-                        List<Banco> lista = dao.listar();
+                        List<Banco> lista = dao.getAll();
                         for (Banco b : lista) {
                             System.out.println("ID: " + b.getIdBanco() + " | Banco: " + b.getNome() +
                                     " | Ag: " + b.getAgencia() + " | Cc: " + b.getConta() +
@@ -61,14 +61,14 @@ public class BancoView {
                         System.out.print("Saldo Atual: "); double nSaldo = scan.nextDouble();
 
                         Banco bancoAlt = new Banco(idAlt, nNome, nAgencia, nConta, nTipo, nSaldo);
-                        dao.atualizar(bancoAlt);
+                        dao.update(bancoAlt);
                         System.out.println("Dados atualizados com sucesso!");
                         break;
 
                     case 4:
                         System.out.print("\nID do Banco para remover: ");
                         long idRem = scan.nextLong();
-                        dao.remover(idRem);
+                        dao.remove(idRem);
                         System.out.println("Conta removida com sucesso!");
                         break;
 
