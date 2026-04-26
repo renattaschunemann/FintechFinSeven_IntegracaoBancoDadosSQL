@@ -1,39 +1,41 @@
 package br.com.fiap.fintech.finseven.model;
 
+import java.time.LocalDate;
+
 public class Investimento extends Transacao {
 
-    private String origem;
+    private double taxa;
+
 
     public Investimento() {
-            super();
+        super();
     }
 
     public Investimento(Transacao transacao) {
         super(transacao.getId(),
-            transacao.getIdBanco(),
-            transacao.getIdCategoria(),
-            transacao.getValor(),
-            transacao.getData().toLocalDate(),
-            transacao.getDescricao(),
-            transacao.getTipo());
+                transacao.getIdBanco(),
+                transacao.getIdCategoria(),
+                transacao.getValor(),
+                transacao.getData().toLocalDate(),
+                transacao.getDescricao(),
+                transacao.getTipo());
     }
 
-    public Investimento(Transacao transacao, String origem) {
+    public Investimento(Transacao transacao, double taxa) {
         this(transacao);
-        this.origem = origem;
+        this.taxa = taxa;
     }
 
-    public Investimento(long idTransacao, String origem) {
+    public Investimento(long idTransacao, double taxa) {
         this.setId(idTransacao);
-        this.origem = origem;
+        this.taxa = taxa;
     }
 
-    public String getOrigem() {
-        return origem;
+    public double getTaxa() {
+        return taxa;
     }
 
-    public void setOrigem(String origem) {
-        this.origem = origem;
+    public void setTaxa(double taxa) {
+        this.taxa = taxa;
     }
-
 }
