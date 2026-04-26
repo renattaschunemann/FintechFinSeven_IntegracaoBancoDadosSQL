@@ -33,7 +33,7 @@ public class ReceitaDao {
     }
 
     public void update(Receita receita) throws SQLException {
-        transacaoDao.atualizar(receita);
+        transacaoDao.update(receita);
 
         PreparedStatement stmt = conexao.prepareStatement("UPDATE T_FINSEVEN_RECEITA SET ORIGEM_RECEITA = ? " +
                 "WHERE ID_TRANSACAO = ?");
@@ -49,7 +49,7 @@ public class ReceitaDao {
     }
 
     public Receita searchById(long id) throws SQLException {
-        Transacao transacao = transacaoDao.pesquisar(id);
+        Transacao transacao = transacaoDao.searchById(id);
 
         PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM T_FINSEVEN_RECEITA WHERE ID_TRANSACAO = ?");
         stmt.setLong(1, id);
@@ -97,7 +97,7 @@ public class ReceitaDao {
         return lista;
     }
 
-    public void remover(long id) throws SQLException {
+    public void remove(long id) throws SQLException {
         String sqlRec = "DELETE FROM T_FINSEVEN_RECEITA WHERE ID_TRANSACAO = ?";
         String sqlTrans = "DELETE FROM T_FINSEVEN_TRANSACAO WHERE ID_TRANSACAO = ?";
         try {
