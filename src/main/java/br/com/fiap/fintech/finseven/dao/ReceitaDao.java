@@ -97,5 +97,25 @@ public class ReceitaDao {
         return lista;
     }
 
+    public void remover(long id) throws SQLException {
+        String sqlRec = "DELETE FROM T_FINSEVEN_RECEITA WHERE ID_TRANSACAO = ?";
+        String sqlTrans = "DELETE FROM T_FINSEVEN_TRANSACAO WHERE ID_TRANSACAO = ?";
+        try {
+            conexao.setAutoCommit(false);
+            try (PreparedStatement stmt = conexao.prepareStatement(sqlRec)) {
+                stmt.setLong(1, id);
+                stmt.executeUpdate();
+            }
+            try (PreparedStatement stmt = conexao.prepareStatement(sqlTrans)) {
+                stmt.setLong(1, id);
+                stmt.executeUpdate();
+            }
+            conexao.commit();
+        } catch (SQLException e) {
+            conexao.rollback();
+            throw e;
+        }
+    }
+
 
 }

@@ -22,6 +22,7 @@ public class ReceitaView {
                 System.out.println("2 - Atualizar Receita");
                 System.out.println("3 - Exibir todas as receitas");
                 System.out.println("4 - Pesquisar receitas por ID");
+                System.out.println("5 - Remover Receita");
                 System.out.println("0 - Sair");
                 System.out.print("Escolha uma opção: ");
 
@@ -111,6 +112,14 @@ public class ReceitaView {
                         } else {
                             System.out.println("\n[!] Receita com ID " + idPesquisa + " não encontrada.");
                         }
+                        break;
+
+
+                    case 5:
+                        System.out.print("\nID da receita para remover: ");
+                        long idRem = scan.nextLong();
+                        dao.remover(idRem);
+                        System.out.println("Removido com sucesso!");
                         break;
 
                     case 0:
