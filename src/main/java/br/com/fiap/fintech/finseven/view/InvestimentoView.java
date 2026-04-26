@@ -34,9 +34,9 @@ public class InvestimentoView {
                 switch (opcao) {
                     case 1:
                         System.out.println("\n-- Novo Lançamento --");
-                        System.out.print("ID do Banco: 3-Bradesco/4-Nubank/6-Mercado Pago");
+                        System.out.print("ID do Banco: 3-Bradesco/4-Nubank/6-Mercado Pago/7-Santander/8-Safra ");
                         long idBanco = scan.nextLong();
-                        System.out.print("ID da Categoria do tipo Investimento:");
+                        System.out.print("ID da Categoria do tipo Investimento: ");
                         long idCat = scan.nextLong();
                         System.out.print("Valor: ");
                         double valor = scan.nextDouble();

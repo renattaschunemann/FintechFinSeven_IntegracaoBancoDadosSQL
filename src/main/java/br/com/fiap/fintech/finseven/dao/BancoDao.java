@@ -28,7 +28,7 @@ public class BancoDao {
         }
     }
 
-    public List<Banco> listar() throws SQLException {
+    public List<Banco> getAll() throws SQLException {
         List<Banco> lista = new ArrayList<>();
         String sql = "SELECT * FROM T_FINSEVEN_BANCO ORDER BY NM_BANCO";
 
@@ -48,7 +48,7 @@ public class BancoDao {
         return lista;
     }
 
-    public void atualizar(Banco banco) throws SQLException {
+    public void update(Banco banco) throws SQLException {
         String sql = "UPDATE T_FINSEVEN_BANCO SET NUM_CONTA = ?, SD_CONTA = ?, TP_CONTA = ?, " +
                 "NUM_AGENCIA = ?, NM_BANCO = ? WHERE ID_BANCO = ?";
         try (PreparedStatement stm = conexao.prepareStatement(sql)) {
@@ -62,7 +62,7 @@ public class BancoDao {
         }
     }
 
-    public void remover(long id) throws SQLException {
+    public void remove(long id) throws SQLException {
         String sql = "DELETE FROM T_FINSEVEN_BANCO WHERE ID_BANCO = ?";
         try (PreparedStatement stm = conexao.prepareStatement(sql)) {
             stm.setLong(1, id);
