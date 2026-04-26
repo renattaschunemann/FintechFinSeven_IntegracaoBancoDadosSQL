@@ -54,7 +54,7 @@ public class ReceitaView {
                         receita.setData(java.time.LocalDate.now());
                         receita.setOrigem(origem);
 
-                        dao.cadastrar(receita);
+                        dao.insert(receita);
                         break;
 
                     case 2:
@@ -76,18 +76,26 @@ public class ReceitaView {
                         receitaAtual.setData(java.time.LocalDate.now());
                         receitaAtual.setOrigem(nOrigem);
 
-                        dao.atualizar(receitaAtual);
+                        dao.update(receitaAtual);
                         break;
 
                     case 3:
                         System.out.println("\n-- Receitas Cadastradas--");
                         // Aqui assume-se que você tem o método listar() no seu DAO
-                        List<Receita> lista = dao.pesquisarTodos();
+                        List<Receita> lista = dao.getAll();
                         if (lista.isEmpty()) {
                             System.out.println("Nenhuma receita encontrada.");
                         } else {
+                            System.out.println("\n---Total de Registros Localizado: " + lista.size() + " ---");
                             for (Receita item : lista) {
-                                System.out.println("ID: " + item.getId() + " | " + item.getDescricao() + " | R$ " + item.getValor());
+                                //System.out.println("ID: " + item.getId() + " | " + item.getDescricao() + " | R$ " + item.getValor());
+                                System.out.println("\n----------------");
+                                System.out.println("ID: " + item.getId());
+                                System.out.println("Valor: R$ " + item.getValor());
+                                System.out.println("Data: " + item.getData());
+                                System.out.println("Descrição: " + item.getDescricao());
+                                System.out.println("Tipo: " + item.getTipo());
+                                System.out.println("Origem: " + item.getOrigem());
                             }
                         }
                         break;
@@ -99,7 +107,7 @@ public class ReceitaView {
                         scan.nextLine(); // Buffer
 
                         // Utiliza o método pesquisar que você criou no DAO
-                        Receita receitaEncontrada = dao.pesquisar(idPesquisa);
+                        Receita receitaEncontrada = dao.searchById(idPesquisa);
 
                         if (receitaEncontrada != null) {
                             System.out.println("\n--- Registro Localizado ---");

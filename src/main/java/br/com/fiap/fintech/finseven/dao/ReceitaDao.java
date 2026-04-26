@@ -19,7 +19,7 @@ public class ReceitaDao {
 
     }
 
-    public void cadastrar(Receita receita) throws SQLException {
+    public void insert(Receita receita) throws SQLException {
         transacaoDao.cadastrar(receita);
 
         PreparedStatement stmt = conexao.prepareStatement("INSERT INTO T_FINSEVEN_RECEITA (ID_TRANSACAO, ORIGEM_RECEITA) VALUES (?, ?)");
@@ -32,7 +32,7 @@ public class ReceitaDao {
         stmt.close();
     }
 
-    public void atualizar(Receita receita) throws SQLException {
+    public void update(Receita receita) throws SQLException {
         transacaoDao.atualizar(receita);
 
         PreparedStatement stmt = conexao.prepareStatement("UPDATE T_FINSEVEN_RECEITA SET ORIGEM_RECEITA = ? " +
@@ -48,7 +48,7 @@ public class ReceitaDao {
         }
     }
 
-    public Receita pesquisar(long id) throws SQLException {
+    public Receita searchById(long id) throws SQLException {
         Transacao transacao = transacaoDao.pesquisar(id);
 
         PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM T_FINSEVEN_RECEITA WHERE ID_TRANSACAO = ?");
@@ -65,7 +65,7 @@ public class ReceitaDao {
         return receita;
     }
 
-    public List<Receita> pesquisarTodos() throws SQLException {
+    public List<Receita> getAll() throws SQLException {
         List<Receita> lista = new ArrayList<>();
         // SQL para selecionar todos os registros das tabelas do join entre transacao e receita
         String sql = "SELECT * FROM T_FINSEVEN_RECEITA r INNER JOIN T_FINSEVEN_TRANSACAO t ON r.ID_TRANSACAO = t.ID_TRANSACAO ORDER BY t.DT_TRANSACAO DESC";
