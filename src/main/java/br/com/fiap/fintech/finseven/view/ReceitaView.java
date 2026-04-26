@@ -27,7 +27,7 @@ public class ReceitaView {
                 System.out.print("Escolha uma opção: ");
 
                 opcao = scan.nextInt();
-                scan.nextLine(); // Limpar o buffer
+                scan.nextLine();
 
                 switch (opcao) {
                     case 1:
